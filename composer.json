@@ -1,0 +1,13 @@
+{
+	"name": "selaz/helpmate-server",
+	"description": "Primitive json distribution server implementation",
+	"type": "library",
+	"require": {
+		"php": ">=7.2"
+	},
+	"autoload": {
+		"psr-4": {
+			"Selaz\\": "src/"
+		}
+	}
+}
