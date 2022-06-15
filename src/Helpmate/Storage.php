@@ -3,9 +3,11 @@
 namespace Selaz\Helpmate;
 
 class Storage {
-    public function __construct()
+    private $filepath;
+
+    public function __construct(string $filepath)
     {
-        
+        $this->filepath = rtrim($filepath,'/');
     }
 
     protected function genereteNewSessioin(int $length) 
@@ -18,7 +20,7 @@ class Storage {
     public function saveFile(string $name, string $data, ?string $session = null) 
     {
         $session = $session ?: $this->genereteNewSessioin(32);
-        $fileName = \sprintf('%s-%s.json',$session,$name);
+        $fileName = \sprintf('%s/%s-%s.json',$this->filepath,$session,$name);
 
         \file_put_contents($fileName,$data);
 
@@ -26,6 +28,10 @@ class Storage {
     }
 
     public function getFile(string $name, string $session) {
-        return \file_get_contents(\sprintf('%s-%s.json',$session,$name));
+        $file = \sprintf('%s/%s-%s.json',$this->filepath,$session,$name);
+        if (!\is_file($file) || !\is_readable($file)) {
+            return \json_encode(['error'=>true,'message'=>'file not found']);
+        }
+        return \file_get_contents($file);
     }
 }
